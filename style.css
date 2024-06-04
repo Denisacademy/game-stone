@@ -1,0 +1,21 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.grid {
+  /* display: flex;
+  flex-wrap: wrap;
+  gap: 20px; */
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+}
+
+.cell {
+  /* outline: 1px solid; */
+  /* width: 150px; */
+  /* height: 150px; */
+  font-size: 40px;
+}

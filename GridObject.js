@@ -2,7 +2,7 @@
 //type : undiscovered discovered player win
 // https://myenglishkid.ru/glossary_trees/
 class GridObject {
-  #backgroundSprites = ["trees", "🎍", "🍁 ", "🎌"];
+  #backgroundSprites = ["🍃", "🎍", "🍁 ", "🎌"];
 
   constructor(sprite, type = "undiscovered") {
     if (!sprite) {
