@@ -10,7 +10,7 @@ class ItemObject extends GridObject {
 
   constructor(sprite, stats) {
     super(sprite);
-    this.type = "item";
+    this.type = "item"; //if no type --> 'undiscovered'
     this.#stats = stats;
   }
 
@@ -23,7 +23,7 @@ class ItemObject extends GridObject {
       ...this.#stats,
     };
   }
-  // polymorfism
+  // polymorfism as GridObject
   describe() {
     const stats = this.#stats;
     console.log(`${this.sprite} you found a ${stats.name}`);
