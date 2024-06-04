@@ -5,6 +5,8 @@
 
 import { GridObject } from "./GridObject.js";
 
+//if place is familar less chance to encounter spider
+
 const emoji = {
   player: "😎",
   win: "💫",
@@ -15,7 +17,7 @@ function getElem(x, y) {
   let cell;
   document.querySelectorAll(".cell").forEach((el) => {
     if (+el.dataset.x === x && +el.dataset.y === y) {
-      console.log(el);
+      // console.log(el);
       cell = el;
     }
   });
@@ -126,6 +128,7 @@ class Grid {
     // CHECK IF DISCOVERED MEANING NOT GENERATE ITEM and set {monkey, 'discovered'}
     if (this.grid[this.playerY][this.playerX].type === "discovered") {
       this.grid[this.playerY][this.playerX] = new GridObject("😎", "discovered");
+      this.grid[this.playerY][this.playerX].describe();
       this.updateMovePlayer("right");
       return;
     }
@@ -148,6 +151,7 @@ class Grid {
 
     if (this.grid[this.playerY][this.playerX].type === "discovered") {
       this.grid[this.playerY][this.playerX] = new GridObject("😎", "discovered");
+      this.grid[this.playerY][this.playerX].describe();
       this.updateMovePlayer("left");
       return;
     }
@@ -170,6 +174,7 @@ class Grid {
     // CHECK IF DISCOVERED MEANING NOT GENERATE ITEM and set {monkey, 'discovered'}
     if (this.grid[this.playerY][this.playerX].type === "discovered") {
       this.grid[this.playerY][this.playerX] = new GridObject("😎", "discovered");
+      this.grid[this.playerY][this.playerX].describe();
       this.updateMovePlayer("up");
       return;
     }
@@ -191,6 +196,7 @@ class Grid {
     // CHECK IF DISCOVERED MEANING NOT GENERATE ITEM and set {monkey, 'discovered'}
     if (this.grid[this.playerY][this.playerX].type === "discovered") {
       this.grid[this.playerY][this.playerX] = new GridObject("😎", "discovered");
+      this.grid[this.playerY][this.playerX].describe();
       this.updateMovePlayer("down");
       return;
     }
