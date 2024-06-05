@@ -3,7 +3,10 @@
 
 //! YARN INIT FOR PACKAGE
 
+import { EnemyObject } from "./EnemyObject.js";
 import { GridObject } from "./GridObject.js";
+import { ItemObject } from "./ItemObject.js";
+import { Player } from "./Player.js";
 
 //if place is familar less chance to encounter spider
 
@@ -52,7 +55,7 @@ function getHtml() {
   document.body.querySelector(".grid").appendChild(docFrag);
 }
 
-getHtml();
+//getHtml();
 
 function updateGridHtml(playerX, playerY) {
   document.querySelectorAll(".cell").forEach((cell) => {
@@ -70,7 +73,7 @@ class Grid {
     this.currentPlayerPlace = {
       x: playerStartX,
       y: height - 1,
-      el: document.querySelector("#player"),
+      // el: document.querySelector("#player"),
     };
 
     this.width = width;
@@ -78,6 +81,11 @@ class Grid {
     // PLAYER X Y
     this.playerX = playerStartX;
     this.playerY = playerStartY;
+    this.player = new Player("Monkey King", {
+      attack: 10,
+      defense: 5,
+      hp: 20,
+    });
 
     // create the grid
     this.grid = [];
@@ -110,6 +118,88 @@ class Grid {
     }
   }
 
+  executeTurn() {
+    console.log("generate", this.#currentObject);
+    if (this.grid[this.playerY][this.playerX].type === "win") {
+      console.log("Youa re winner");
+      process.exit();
+      return;
+    }
+
+    if (this.#currentObject.type === "discovered") {
+      this.#currentObject.describe();
+      return;
+    }
+
+    if (this.#currentObject.type === "item") {
+      this.#currentObject.describe();
+      const itemStats = this.#currentObject.getState();
+      this.player.addToStats(itemStats);
+      return;
+    }
+
+    // enemy
+    this.#currentObject.describe();
+
+    const enemyStats = this.#currentObject.getStats(); //because condition
+    const enemyName = this.#currentObject.getName();
+    const playerStats = this.player.getStats();
+
+    if (enemyStats.defense > playerStats.attack) {
+      console.log(`You lose- ${enemyStats} was too powerfull!`);
+      return;
+    }
+
+    let totalPlayerDamage = 0;
+    while (enemyStats.hp > 0) {
+      const enemyDamageTurn = playerStats.attack - enemyStats.defense;
+      const playerDamageTrun = enemyStats.attack - playerStats.defense;
+
+      if (enemyDamageTurn > 0) {
+        enemyStats.hp -= enemyDamageTurn;
+      }
+      if (playerDamageTrun > 0) {
+        playerStats.hp -= playerDamageTrun;
+        totalPlayerDamage += playerDamageTrun;
+      }
+    }
+
+    if (playerStats.hp <= 0) {
+      console.log("You lose", `${enemyName} was too powerfull`);
+      return;
+    }
+
+    this.player.addToStats({ hp: -totalPlayerDamage });
+    console.log(`You defeated the ${enemyName} our updated stats`);
+    // AFTER FIGHT WE SHOW NEW STATS
+    this.player.describe();
+  }
+
+  generateGridObject() {
+    const random = Math.random();
+    let object;
+
+    if (random < 0.15) {
+      object = new ItemObject("🤺", {
+        name: "sword",
+        attack: 3,
+        defense: 1,
+        hp: 0,
+      });
+    } else if (random < 0.35) {
+      object = new EnemyObject("🦇", {
+        name: "Bat",
+        attack: 5,
+        defense: 1,
+        hp: 6,
+      });
+    } else {
+      object = new GridObject("🦶", "discovery");
+    }
+
+    return object;
+  }
+
   removePrevPlayerPlace() {
     this.grid[this.playerY][this.playerX] = new GridObject("🐾", "discovered");
   }
@@ -127,12 +217,17 @@ class Grid {
 
     // CHECK IF DISCOVERED MEANING NOT GENERATE ITEM and set {monkey, 'discovered'}
     if (this.grid[this.playerY][this.playerX].type === "discovered") {
+      this.grid[this.playerY][this.playerX].describe();
       this.grid[this.playerY][this.playerX] = new GridObject("😎", "discovered");
       this.grid[this.playerY][this.playerX].describe();
       this.updateMovePlayer("right");
       return;
     }
     // NEW PLACE
+    // console.log(this.generateGridObject().describe());
+    this.#currentObject = this.generateGridObject();
+    // this.#currentObject.describe();
+    this.executeTurn();
     this.grid[this.playerY][this.playerX] = new GridObject("😎", "player"); //generation
     // document.querySelector('div.className[style*="text-decoration:line-through"]');
     this.updateMovePlayer("right");
@@ -157,6 +252,8 @@ class Grid {
     }
 
     // NEW PLACE
+    this.#currentObject = this.generateGridObject();
+    this.executeTurn();
     this.grid[this.playerY][this.playerX] = new GridObject("😎", "player"); //generation
     this.updateMovePlayer("left");
   }
@@ -180,6 +277,8 @@ class Grid {
     }
 
     // NEW PLACE
+    this.#currentObject = this.generateGridObject();
+    this.executeTurn();
     this.grid[this.playerY][this.playerX] = new GridObject("😎", "player"); //generation
     this.updateMovePlayer("up");
   }
@@ -202,6 +301,9 @@ class Grid {
     }
 
     // NEW PLACE
+    this.#currentObject = this.generateGridObject();
+
+    this.executeTurn();
     this.grid[this.playerY][this.playerX] = new GridObject("😎", "player"); //generation
     this.updateMovePlayer("down");
   }
@@ -252,7 +354,7 @@ class Grid {
 }
 
 const g = new Grid();
-window.grid = g;
+// window.grid = g;
 
 /*flow
 Check pos if no bounds

@@ -1,4 +1,4 @@
-import { GridObject } from "./GridObject";
+import { GridObject } from "./GridObject.js";
 
 class EnemyObject extends GridObject {
   #stats = {

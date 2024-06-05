@@ -1,10 +1,10 @@
-import { GridObject } from "./GridObject";
+import { GridObject } from "./GridObject.js";
 
 class ItemObject extends GridObject {
   #stats = {
     name: null,
     attack: 0,
-    defence: 0,
+    defense: 0,
     hp: 0,
   };
 
@@ -27,7 +27,7 @@ class ItemObject extends GridObject {
   describe() {
     const stats = this.#stats;
     console.log(`${this.sprite} you found a ${stats.name}`);
-    console.log(`${stats.name} Stats : HP ${stats.hp} ATK: ${stats.attack} DEF : ${stats.defence}`);
+    console.log(`${stats.name} Stats : HP ${stats.hp} ATK: ${stats.attack} DEF : ${stats.defense}`);
   }
 }
 
