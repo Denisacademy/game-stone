@@ -24,11 +24,11 @@ class Player {
     if (statsObject.attack) {
       this.#stats.attack += statsObject.attack;
     }
-    if (statsObject.defence) {
-      this.#stats.attack += statsObject.defence;
+    if (statsObject.defense) {
+      this.#stats.defense += statsObject.defense;
     }
     if (statsObject.hp) {
-      this.#stats.attack += statsObject.hp;
+      this.#stats.hp += statsObject.hp;
     }
   }
 
@@ -36,6 +36,9 @@ class Player {
     const stats = this.#stats;
 
     console.log(`Player Stats: HP: ${stats.hp} ATK: ${stats.attack} DEF: ${stats.defense}`);
+    document.getElementById(
+      "stats"
+    ).innerText = `Player Stats: HP: ${stats.hp} ATK: ${stats.attack} DEF: ${stats.defense}`;
   }
 }
 
